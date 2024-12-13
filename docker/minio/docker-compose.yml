@@ -1,0 +1,18 @@
+# docker-compose.yml
+services:
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    restart: unless-stopped
+    command: server /data --console-address :9001 --address :9000
+    environment:
+      MINIO_SERVER_URL: http://127.0.0.1:9000
+      MINIO_BROWSER_REDIRECT_URL: http://127.0.0.1:9001
+      MINIO_BROWSER_SESSION_DURATION: 24h # 开发用时间长点也没关系
+      MINIO_ROOT_USER: minio # root帐号
+      MINIO_ROOT_PASSWORD: minioadmin # root密码
+    ports:
+      - 9000:9000 # 9000 用于访问对象
+      - 9001:9001 # 9001 用于访问Console
+    volumes:
+      - ./data:/data # 用于存储真实的数据
